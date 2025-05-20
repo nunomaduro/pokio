@@ -3,6 +3,7 @@
 namespace Pokio\Runtime\Fork;
 
 use Pokio\Contracts\Result;
+use Pokio\Support\Encryption;
 
 /**
  * Represents the result of a forked process.
@@ -40,7 +41,7 @@ final class ForkResult implements Result
         $pipe = fopen($this->pipePath, 'r');
 
         stream_set_blocking($pipe, true);
-        $serialized = stream_get_contents($pipe);
+        $encryptedData = stream_get_contents($pipe);
         fclose($pipe);
 
         if (file_exists($this->pipePath)) {
@@ -48,6 +49,9 @@ final class ForkResult implements Result
         }
 
         $this->resolved = true;
+
+        // Decrypt the data before unserializing
+        $serialized = Encryption::decrypt($encryptedData);
 
         return $this->result = unserialize($serialized);
     }
