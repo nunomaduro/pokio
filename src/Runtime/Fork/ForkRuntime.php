@@ -7,6 +7,7 @@ namespace Pokio\Runtime\Fork;
 use Closure;
 use Pokio\Contracts\Result;
 use Pokio\Contracts\Runtime;
+use Pokio\Support\Encryption;
 use Pokio\Support\PipePath;
 use RuntimeException;
 
@@ -37,7 +38,10 @@ final readonly class ForkRuntime implements Runtime
             $result = $callback();
             $pipe = fopen($pipePath, 'w');
 
-            fwrite($pipe, serialize($result));
+            $serialized = serialize($result);
+            $encrypted = Encryption::encrypt($serialized);
+
+            fwrite($pipe, $encrypted);
             fclose($pipe);
 
             exit(0);
