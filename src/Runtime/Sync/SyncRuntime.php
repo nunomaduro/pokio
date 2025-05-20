@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pokio\Runtime\Sync;
 
 use Closure;

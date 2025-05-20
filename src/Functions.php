@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Pokio\Promise;
 
 if (! function_exists('async')) {
