@@ -3,6 +3,7 @@
 namespace Pokio\Runtime\Fork;
 
 use Pokio\Contracts\Result;
+use Pokio\Environment;
 
 /**
  * Represents the result of a forked process.
@@ -40,7 +41,8 @@ final class ForkResult implements Result
         $pipe = fopen($this->pipePath, 'r');
 
         stream_set_blocking($pipe, true);
-        $serialized = stream_get_contents($pipe);
+        $contents = stream_get_contents($pipe);
+
         fclose($pipe);
 
         if (file_exists($this->pipePath)) {
@@ -49,6 +51,28 @@ final class ForkResult implements Result
 
         $this->resolved = true;
 
-        return $this->result = unserialize($serialized);
+        return $this->result = match (Environment::getEncryptionKey() !== null) {
+            true => unserialize($this->decrypt($contents)),
+            false => unserialize($contents),
+        };
+    }
+
+    /**
+     * Decrypts the given data using the environment's encryption key.
+     */
+    private function decrypt(string $data): string
+    {
+        $contents = base64_decode($data);
+
+        $initializationVector = substr($contents, 0, 16);
+        $encrypted = substr($contents, 16);
+
+        $decrypted = openssl_decrypt($encrypted, 'aes-256-cbc', Environment::getEncryptionKey(), 0, $initializationVector);
+
+        if ($decrypted === false) {
+            throw new \RuntimeException('Failed to decrypt data');
+        }
+
+        return $decrypted;
     }
 }

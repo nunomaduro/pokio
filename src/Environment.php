@@ -16,6 +16,11 @@ final class Environment
     public static ?Runtime $runtime = null;
 
     /**
+     * The environment's encryption key.
+     */
+    private static ?string $encryptionKey = null;
+
+    /**
      * The environment's runtime.
      */
     public static function useFork(): void
@@ -45,5 +50,22 @@ final class Environment
         return self::$runtime ??= $areExtensionsAvailable
             ? new ForkRuntime
             : new SyncRuntime;
+    }
+
+    /**
+     * Sets the environment's encryption key.
+     * Hashes the given key using SHA-256 to ensure a 32-byte key for encryption.
+     */
+    public static function setEncryptionKey(string $key): void
+    {
+        self::$encryptionKey = hash('sha256', $key, false);
+    }
+
+    /**
+     * Gets the environment's encryption key.
+     */
+    public static function getEncryptionKey(): ?string
+    {
+        return self::$encryptionKey;
     }
 }
