@@ -10,7 +10,10 @@
         }
     ],
     "require": {
-        "php": "^8.3.0"
+        "php": "^8.3.0",
+        "ext-openssl": "*",
+        "ext-pcntl": "*",
+        "ext-posix": "*"
     },
     "require-dev": {
         "laravel/pint": "^1.22.1",
