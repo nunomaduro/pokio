@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Pokio\Promise;
+
 test('async with a recursive promise', function (): void {
-    $promise = async(fn () => async(fn () => async(fn () => async(fn () => async(fn () => 1)))));
+    $promise = async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): int => 1)))));
 
     $result = await($promise);
 
@@ -11,8 +13,8 @@ test('async with a recursive promise', function (): void {
 })->with('runtimes');
 
 test('async with a recursive promise with multiple awaits', function (): void {
-    $promiseA = async(fn () => async(fn () => async(fn () => async(fn () => async(fn () => 1)))));
-    $promiseB = async(fn () => async(fn () => async(fn () => async(fn () => async(fn () => 2)))));
+    $promiseA = async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): int => 1)))));
+    $promiseB = async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): int => 2)))));
 
     [$resultA, $resultB] = await([$promiseA, $promiseB]);
 
@@ -21,9 +23,9 @@ test('async with a recursive promise with multiple awaits', function (): void {
 })->with('runtimes');
 
 test('async with a recursive promise with multiple awaits and a single await', function (): void {
-    $promise = async(fn () => async(fn () => async(function () {
-        $promiseA = async(fn () => async(fn () => async(fn () => async(fn () => async(fn () => 1)))));
-        $promiseB = async(fn () => async(fn () => async(fn () => async(fn () => async(fn () => 2)))));
+    $promise = async(fn (): Promise => async(fn (): Promise => async(function () {
+        $promiseA = async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): int => 1)))));
+        $promiseB = async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): Promise => async(fn (): int => 2)))));
 
         return await([$promiseA, $promiseB]);
     })));

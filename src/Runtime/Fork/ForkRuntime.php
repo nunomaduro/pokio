@@ -17,7 +17,7 @@ final readonly class ForkRuntime implements Runtime
     /**
      * Defers the given callback to be executed asynchronously.
      */
-    public function defer(Closure $callback, ?Closure $rescue = null): Result
+    public function defer(Closure $callback): Result
     {
         // random 27-bit positive key
         $shmKey = random_int(0x100000, 0x7FFFFFFF);
@@ -37,10 +37,6 @@ final readonly class ForkRuntime implements Runtime
                 }
             } catch (Throwable $exception) {
                 $result = new PokioExceptionHandler($exception);
-
-                if ($rescue instanceof Closure) {
-                    $result = $rescue($exception);
-                }
             }
 
             $data = serialize($result);

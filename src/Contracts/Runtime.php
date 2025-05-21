@@ -11,5 +11,5 @@ interface Runtime
     /**
      * Defers the given callback to be executed asynchronously.
      */
-    public function defer(Closure $callback, ?Closure $rescue = null): Result;
+    public function defer(Closure $callback): Result;
 }

@@ -13,8 +13,8 @@ final readonly class SyncRuntime implements Runtime
     /**
      * Defers the given callback to be executed asynchronously.
      */
-    public function defer(Closure $callback, ?Closure $rescue = null): Result
+    public function defer(Closure $callback): Result
     {
-        return new SyncResult($callback, $rescue);
+        return new SyncResult($callback);
     }
 }
