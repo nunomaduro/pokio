@@ -35,7 +35,7 @@ test('async with a caught exception with finally', function (): void {
     })->catch(function (Throwable $e): string {
         expect($e)->toBeInstanceOf(HedgehogException::class)
             ->and($e->getMessage())->toEqual('Not enough hedgehogs');
-    })->finally(fn(): string => 'Hedgehogs');
+    })->finally(fn (): string => 'Hedgehogs');
 
     $result = await($promise);
 

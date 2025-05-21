@@ -7,7 +7,6 @@ namespace Pokio\Runtime\Sync;
 use Closure;
 use Pokio\Contracts\Result;
 use Pokio\Promise;
-use Throwable;
 
 final readonly class SyncResult implements Result
 {
