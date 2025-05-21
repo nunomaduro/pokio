@@ -53,6 +53,7 @@ final class Promise
     {
         return async(function () use ($onFulfilled) {
             $result = await($this);
+
             return $onFulfilled($result);
         });
     }
