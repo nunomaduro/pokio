@@ -51,14 +51,9 @@ final class Promise
      */
     public function then(Closure $onFulfilled): self
     {
-        $promise = new self(function () use ($onFulfilled) {
-            $result = $this->resolve();
-
+        return async(function () use ($onFulfilled) {
+            $result = await($this);
             return $onFulfilled($result);
         });
-
-        $promise->run();
-
-        return $promise;
     }
 }
