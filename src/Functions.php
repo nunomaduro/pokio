@@ -13,9 +13,9 @@ if (! function_exists('async')) {
      * @param  Closure(): TReturn  $callback
      * @return Promise<TReturn>
      */
-    function async(Closure $callback, ?Closure $rescue = null): Promise
+    function async(Closure $callback): Promise
     {
-        $promise = new Promise($callback, $rescue);
+        $promise = new Promise($callback);
 
         $promise->run();
 
