@@ -70,7 +70,7 @@ $promise = async(fn (): int => 1 + 2)
     ->then(fn ($result): int => $result * 2);
 
 $result = await($promise);
-var_dump($result); // int(8)
+var_dump($result); // int(10)
 ```
 
 Optionally, you may chain a `catch` method to the promise, which will be called if the given closure throws an exception.
