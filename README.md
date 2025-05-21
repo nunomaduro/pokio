@@ -19,13 +19,13 @@
 ```php
 $promiseA = async(function () {
     sleep(2);
-    
+
     return 'Task 1';
 });
 
 $promiseB = async(function () {
     sleep(2);
-    
+
     return 'Task 2';
 });
 
@@ -50,7 +50,7 @@ composer require nunomaduro/pokio:@dev
 
 ## Usage
 
-- `async`
+-   `async`
 
 The `async` global function returns a promise that will eventually resolve the value returned by the given closure.
 
@@ -60,6 +60,17 @@ $promise = async(function () {
 });
 
 var_dump(await($promise)); // int(2)
+```
+
+Similar to other promise libraries, pokio allows you to chain methods to the promise. The `then` method will be called when the promise resolves.
+
+```php
+$promise = async(fn (): int => 1 + 2)
+    ->then(fn ($result): int => $result + 2)
+    ->then(fn ($result): int => $result * 2);
+
+$result = await($promise);
+var_dump($result); // int(8)
 ```
 
 Optionally, you may chain a `catch` method to the promise, which will be called if the given closure throws an exception.
@@ -100,14 +111,14 @@ $promise = async(function () {
 var_dump(await($promise)); // int(2)
 ```
 
-- `await`
+-   `await`
 
 The `await` global function will block the current process until the given promise resolves.
 
 ```php
 $promise = async(function () {
     sleep(2);
-    
+
     return 1 + 1;
 });
 
@@ -119,13 +130,13 @@ You may also pass an array of promises to the `await` function, which will be aw
 ```php
 $promiseA = async(function () {
     sleep(2);
-    
+
     return 1 + 1;
 });
 
 $promiseB = async(function () {
     sleep(2);
-    
+
     return 2 + 2;
 });
 
@@ -134,13 +145,13 @@ var_dump(await([$promiseA, $promiseB])); // array(2) { [0]=> int(2) [1]=> int(4)
 
 ## Follow Nuno
 
-- Follow the creator Nuno Maduro:
-    - YouTube: **[youtube.com/@nunomaduro](https://www.youtube.com/@nunomaduro)** — Videos every weekday
-    - Twitch: **[twitch.tv/enunomaduro](https://www.twitch.tv/enunomaduro)** — Streams (almost) every weekday
-    - Twitter / X: **[x.com/enunomaduro](https://x.com/enunomaduro)**
-    - LinkedIn: **[linkedin.com/in/nunomaduro](https://www.linkedin.com/in/nunomaduro)**
-    - Instagram: **[instagram.com/enunomaduro](https://www.instagram.com/enunomaduro)**
-    - Tiktok: **[tiktok.com/@enunomaduro](https://www.tiktok.com/@enunomaduro)**
+-   Follow the creator Nuno Maduro:
+    -   YouTube: **[youtube.com/@nunomaduro](https://www.youtube.com/@nunomaduro)** — Videos every weekday
+    -   Twitch: **[twitch.tv/enunomaduro](https://www.twitch.tv/enunomaduro)** — Streams (almost) every weekday
+    -   Twitter / X: **[x.com/enunomaduro](https://x.com/enunomaduro)**
+    -   LinkedIn: **[linkedin.com/in/nunomaduro](https://www.linkedin.com/in/nunomaduro)**
+    -   Instagram: **[instagram.com/enunomaduro](https://www.instagram.com/enunomaduro)**
+    -   Tiktok: **[tiktok.com/@enunomaduro](https://www.tiktok.com/@enunomaduro)**
 
 ## License
 
