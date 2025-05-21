@@ -40,4 +40,25 @@ final class Promise
     {
         return $this->result->get();
     }
+
+    /**
+     * Chains a callback to be executed after the promise resolves.
+     *
+     * @template TNextReturn
+     *
+     * @param  Closure(TReturn): TNextReturn  $onFulfilled
+     * @return Promise<TNextReturn>
+     */
+    public function then(Closure $onFulfilled): self
+    {
+        $promise = new self(function () use ($onFulfilled) {
+            $result = $this->resolve();
+
+            return $onFulfilled($result);
+        });
+
+        $promise->run();
+
+        return $promise;
+    }
 }

@@ -20,3 +20,22 @@ test('async with a multiple promises', function (): void {
     expect($resultA)->toBe(3)
         ->and($resultB)->toBe(7);
 })->with('runtimes');
+
+test('async with a then', function (): void {
+    $promise = async(fn (): int => 1 + 2)
+        ->then(fn ($result): int => $result + 2);
+
+    $result = await($promise);
+
+    expect($result)->toBe(5);
+})->with('runtimes');
+
+test('async with multiple thens', function (): void {
+    $promise = async(fn (): int => 1 + 2)
+        ->then(fn ($result): int => $result + 2)
+        ->then(fn ($result): int => $result * 2);
+
+    $result = await($promise);
+
+    expect($result)->toBe(10);
+})->with('runtimes');
