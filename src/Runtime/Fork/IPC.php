@@ -12,53 +12,89 @@ use RuntimeException;
 final readonly class IPC
 {
     /**
-     * Creates a new memory block.
+     * Creates a new temporary file for IPC.
      */
     private function __construct(
-        private int $address,
+        private string $filepath,
     ) {
         //
     }
 
-    /**
-     * Creates an inter-process communication (IPC) memory block.
-     */
     public static function create(): self
     {
-        return new self(
-            random_int(0x100000, 0x7FFFFFFF),
-        );
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pokio_ipc_');
+
+        if ($tmpFile === false) {
+            throw new RuntimeException('Failed to create temporary file for IPC');
+        }
+
+        return new self($tmpFile);
     }
 
     /**
-     * Reads the contents of the memory block.
+     * Writes data to the temporary file.
      */
     public function put(string $data): void
     {
-        $block = shmop_open($this->address, 'c', 0600, mb_strlen($data));
+        $bytesWritten = file_put_contents($this->filepath, $data, LOCK_EX);
 
-        if ($block === false) {
-            throw new RuntimeException('Failed to create shared memory block');
+        if ($bytesWritten === false) {
+            throw new RuntimeException('Failed to write data to temporary file');
         }
-
-        shmop_write($block, $data, 0);
     }
 
     /**
-     * Pops the contents of the memory block and clears it.
+     * Reads and deletes the temporary file.
      */
     public function pop(): string
     {
-        $block = shmop_open($this->address, 'a', 0, 0);
-
-        if ($block === false) {
-            throw new RuntimeException('Failed to open shared memory block');
+        if (!file_exists($this->filepath)) {
+            throw new RuntimeException('Temporary file does not exist');
         }
 
-        $data = shmop_read($block, 0, shmop_size($block));
+        $data = file_get_contents($this->filepath);
 
-        shmop_delete($block);
+        if ($data === false) {
+            throw new RuntimeException('Failed to read from temporary file');
+        }
+
+        // Clean up the temporary file
+        unlink($this->filepath);
 
         return $data;
+    }
+
+    /**
+     * Get the file path (useful for debugging or manual cleanup).
+     */
+    public function getFilepath(): string
+    {
+        return $this->filepath;
+    }
+
+    /**
+     * Check if the temporary file exists.
+     */
+    public function exists(): bool
+    {
+        return file_exists($this->filepath);
+    }
+
+    /**
+     * Manual cleanup in case pop() wasn't called.
+     */
+    public function cleanup(): void
+    {
+        if (file_exists($this->filepath)) {
+            unlink($this->filepath);
+        }
+    }
+
+    /**
+     * Destructor to ensure cleanup.
+     */
+    public function __destruct()
+    {
+        $this->cleanup();
     }
 }
