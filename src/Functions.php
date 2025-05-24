@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Pokio\Kernel;
 use Pokio\Pokio;
 use Pokio\Promise;
 
@@ -20,6 +19,7 @@ if (! function_exists('async')) {
         return new Promise($callback);
     }
 }
+
 if (! function_exists('await')) {
     /**
      * Awaits the resolution of a promise.
@@ -32,13 +32,7 @@ if (! function_exists('await')) {
     function await(array|Promise $promises): mixed
     {
         if (! is_array($promises)) {
-            $promises->defer();
-
-            return $promises->resolve();
-        }
-
-        foreach ($promises as $promise) {
-            $promise->defer();
+            $promises = [$promises];
         }
 
         return array_map(

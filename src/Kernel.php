@@ -71,17 +71,11 @@ final class Kernel
      */
     public function runtime(): Runtime
     {
-        if (self::instance()->isOrchestrator() === false) {
+        if (! $this->isOrchestrator()) {
             return $this->syncRuntime ??= new SyncRuntime();
         }
 
-        return $this->asyncRuntime ??= (function () {
-            if (Environment::supportsFork()) {
-                return new ForkRuntime(Environment::maxProcesses());
-            }
-
-            return $this->syncRuntime ??= new SyncRuntime();
-        })();
+        return $this->asyncRuntime ??= $this->resolveAsyncRuntime();
     }
 
     /**
@@ -90,5 +84,17 @@ final class Kernel
     public function isOrchestrator(): bool
     {
         return $this->orchestratorPid === getmypid();
+    }
+
+    /**
+     * Returns the appropriate async runtime based on environment support for forking.
+     */
+    private function resolveAsyncRuntime(): Runtime
+    {
+        if (Environment::supportsFork()) {
+            return new ForkRuntime(Environment::maxProcesses());
+        }
+
+        return $this->syncRuntime ??= new SyncRuntime();
     }
 }
