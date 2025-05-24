@@ -10,3 +10,6 @@
 /.idea/
 *.swp
 *.swo
+/.temp
+/.vscode
+.STREAM.md
