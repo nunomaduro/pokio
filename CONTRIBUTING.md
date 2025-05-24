@@ -19,17 +19,19 @@ Please review these guidelines before submitting any pull requests.
 
 ## Setup
 
+### Option 1: Local Setup (requires PHP 8.3+ and Composer)
+
 Clone your fork, then install the dev dependencies:
 ```bash
 composer install
 ```
-## Lint
+### Lint
 
 Lint your code:
 ```bash
 composer lint
 ```
-## Tests
+### Tests
 
 Run all tests:
 ```bash
@@ -44,4 +46,19 @@ composer test:types
 Unit tests:
 ```bash
 composer test:unit
+```
+
+### Option 2: Docker + Makefile
+
+``` bash
+make build        # build's container
+make build-clean  # build's container --no-cache
+make up           # Start services
+make install      # (composer install)
+make lint         # (composer lint)
+make tests        # (composer test)
+make test         # (composer test:unit)
+make types        # (composer test:types)
+make down         # Stop services
+make enter        # Enters the container shell
 ```
