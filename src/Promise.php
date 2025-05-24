@@ -30,15 +30,7 @@ final class Promise
      */
     public function __construct(private readonly Closure $callback)
     {
-        //
-    }
-
-    /**
-     * Defer the given callback to be executed asynchronously.
-     */
-    public function defer(): void
-    {
-        $this->future ??= Kernel::instance()->runtime()->defer($this->callback);
+        $this->defer();
     }
 
     /**
@@ -120,5 +112,13 @@ final class Promise
                 ($finally)();
             }
         });
+    }
+
+    /**
+     * Defer the given callback to be executed asynchronously.
+     */
+    private function defer(): void
+    {
+        $this->future = Kernel::instance()->runtime()->defer($this->callback);
     }
 }
