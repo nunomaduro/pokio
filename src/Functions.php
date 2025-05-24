@@ -32,13 +32,7 @@ if (! function_exists('await')) {
     function await(array|Promise $promises): mixed
     {
         if (! is_array($promises)) {
-            $promises->defer();
-
             return $promises->resolve();
-        }
-
-        foreach ($promises as $promise) {
-            $promise->defer();
         }
 
         return array_map(

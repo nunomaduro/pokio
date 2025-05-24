@@ -12,7 +12,6 @@ test('no catch for correct throwable type throws exception', function (): void {
             return true;
         });
 
-        $promise->defer();
         $promise->resolve();
     })->toThrow(RuntimeException::class, 'Uncaught exception');
 })->with('runtimes');
@@ -24,7 +23,6 @@ test('catch for correct throwable type handles exception', function (): void {
         return true;
     });
 
-    $promise->defer();
     $result = $promise->resolve();
     expect($result)->toBeTrue();
 })->with('runtimes');
