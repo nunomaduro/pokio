@@ -16,7 +16,10 @@
             "creat",
             "prot",
             "pokio's",
-            "mem"
+            "mem",
+            "Docker",
+            "DockerFile",
+            "Makefile"
         ],
         "paths": []
     }

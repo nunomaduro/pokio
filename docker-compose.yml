@@ -1,0 +1,10 @@
+services:
+  pokio:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile
+    volumes:
+      - .:/app
+    tty: true
+    working_dir: /app
+    command: bash
