@@ -135,7 +135,7 @@ test('finally is called after then', function (): void {
     fclose($tmpfile);
 })->with('runtimes');
 
-test('then after async returing a promise', function (): void {
+test('then after async returning a promise', function (): void {
     $promise = async(fn () => async(fn () => 4))
         ->then(fn (int $result) => $result * 2);
 
