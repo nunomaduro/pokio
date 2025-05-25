@@ -24,6 +24,11 @@ final class Promise
     private Future $future;
 
     /**
+     * Whether the promise has been cancelled.
+     */
+    private bool $cancelled = false;
+
+    /**
      * Creates a new promise instance.
      *
      * @param  Closure(): TReturn  $callback
@@ -38,6 +43,10 @@ final class Promise
      */
     public function defer(): void
     {
+        if ($this->cancelled) {
+            return;
+        }
+
         $this->future ??= Kernel::instance()->runtime()->defer($this->callback);
     }
 
@@ -48,9 +57,33 @@ final class Promise
      */
     public function resolve(): mixed
     {
+        if ($this->cancelled) {
+            throw new \RuntimeException('Cannot resolve a cancelled promise');
+        }
+
         $this->defer();
 
         return $this->future->await();
+    }
+
+    /**
+     * Cancels the promise.
+     *
+     * @return bool Whether the promise was successfully cancelled
+     */
+    public function cancel(): bool
+    {
+        if ($this->cancelled) {
+            return false;
+        }
+
+        $this->cancelled = true;
+
+        if (isset($this->future)) {
+            return $this->future->cancel();
+        }
+
+        return true;
     }
 
     /**

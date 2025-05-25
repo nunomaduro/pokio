@@ -15,14 +15,19 @@ use Pokio\Promise;
  *
  * @implements Future<TResult>
  */
-final readonly class SyncFuture implements Future
+final class SyncFuture implements Future
 {
+    /**
+     * Whether the future has been cancelled.
+     */
+    private bool $cancelled = false;
+
     /**
      * Creates a new sync result instance.
      *
      * @param  Closure(): TResult  $callback
      */
-    public function __construct(private Closure $callback)
+    public function __construct(private readonly Closure $callback)
     {
         //
     }
@@ -34,6 +39,10 @@ final readonly class SyncFuture implements Future
      */
     public function await(): mixed
     {
+        if ($this->cancelled) {
+            throw new \RuntimeException('Cannot await a cancelled future');
+        }
+
         $result = ($this->callback)();
 
         if ($result instanceof Promise) {
@@ -41,5 +50,20 @@ final readonly class SyncFuture implements Future
         }
 
         return $result;
+    }
+
+    /**
+     * Cancels the future.
+     *
+     * @return bool Whether the future was successfully cancelled
+     */
+    public function cancel(): bool
+    {
+        if ($this->cancelled) {
+            return false;
+        }
+
+        $this->cancelled = true;
+        return true;
     }
 }

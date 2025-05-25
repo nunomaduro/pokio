@@ -31,6 +31,11 @@ final class ForkFuture implements Future
     private bool $resolved = false;
 
     /**
+     * Indicates whether the future has been cancelled.
+     */
+    private bool $cancelled = false;
+
+    /**
      * Creates a new fork result instance.
      */
     public function __construct(
@@ -48,6 +53,10 @@ final class ForkFuture implements Future
      */
     public function await(): mixed
     {
+        if ($this->cancelled) {
+            throw new \RuntimeException('Cannot await a cancelled future');
+        }
+
         if ($this->resolved) {
             return $this->result;
         }
@@ -69,5 +78,32 @@ final class ForkFuture implements Future
         $result = unserialize($this->memory->pop());
 
         return $this->result = $result;
+    }
+
+    /**
+     * Cancels the future by terminating the child process.
+     *
+     * @return bool Whether the future was successfully cancelled
+     */
+    public function cancel(): bool
+    {
+        if ($this->cancelled || $this->resolved) {
+            return false;
+        }
+
+        $this->cancelled = true;
+
+        // Send SIGTERM to the child process
+        posix_kill($this->pid, SIGTERM);
+
+        // Wait for the process to terminate
+        pcntl_waitpid($this->pid, $status);
+
+        // Clean up the IPC file
+        if (file_exists($this->memory->path())) {
+            unlink($this->memory->path());
+        }
+
+        return true;
     }
 }
