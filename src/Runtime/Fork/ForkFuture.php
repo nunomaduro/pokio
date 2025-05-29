@@ -6,6 +6,7 @@ namespace Pokio\Runtime\Fork;
 
 use Closure;
 use Pokio\Contracts\Future;
+use RuntimeException;
 
 /**
  * Represents the result of a forked process.
@@ -65,9 +66,24 @@ final class ForkFuture implements Future
 
         $this->resolved = true;
 
-        /** @var TResult $result */
-        $result = unserialize($this->memory->pop());
+        return $this->result = $this->unserializeResult($this->memory->pop());
+    }
 
-        return $this->result = $result;
+    /**
+     * Safely unserializes a value from the forked process.
+     *
+     * @return TResult
+     *
+     * @throws RuntimeException
+     */
+    private function unserializeResult(string $data): mixed
+    {
+        $result = @unserialize($data);
+
+        if ($result === false && $data !== 'b:0;') {
+            throw new RuntimeException('Failed to unserialize fork result.');
+        }
+
+        return $result;
     }
 }
