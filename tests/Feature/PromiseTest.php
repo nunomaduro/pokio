@@ -197,3 +197,27 @@ test('invokable promise resolves correctly', function (): void {
 
     expect($result)->toBe(3);
 })->with('runtimes');
+
+test('invokable waits for the promise to resolve', function (): void {
+    $promise = async(fn (): int => 1 + 2);
+
+    $result = $promise();
+
+    expect($result)->toBe(3);
+})->with('runtimes');
+
+test('invokable promise with await resolves correctly', function (): void {
+    $promise = async(fn (): int => 1 + 2);
+
+    $result = $promise(true);
+
+    expect($result)->toBe(3);
+})->with('runtimes');
+
+test('invokable promise without await does not resolve', function (): void {
+    $promise = async(fn (): int => 1 + 2);
+
+    $result = $promise(false);
+
+    expect($result)->toBeNull();
+})->with('runtimes');
