@@ -176,6 +176,21 @@ $result = $promise();
 var_dump($result); // int(3)
 ```
 
+If the result of the promise is of no value to your application, you can use the await parameter to discard the result. This is useful when you just want to run a task asynchronously without caring about its result.
+
+```php
+$promise = async(function () {
+    sleep(2); // Or any other time-consuming task
+    
+    return 1 + 1;
+});
+
+$promise(await: false); // Discard the result
+echo "Task started, but main process continues...\n";
+```
+
+However, if your main process finishes before the asynchronous task completes, the parent process will wait for the child process to finish before exiting.
+
 ## Follow Nuno
 
 - Follow the creator Nuno Maduro:
