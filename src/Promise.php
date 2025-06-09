@@ -62,13 +62,14 @@ final class Promise
     }
 
     /**
-     * Invokes the promise, defering the callback to be executed immediately.
+     * Invokes the promise, deferring the callback to be executed immediately.
      *
-     * @return TReturn
+     * @param  bool  $await  Whether to await the result of the promise.
+     * @return ($await is true ? TReturn : null)
      */
-    public function __invoke(): mixed
+    public function __invoke(bool $await = true): mixed
     {
-        return $this->resolve();
+        return $this->resolve($await);
     }
 
     /**
@@ -82,15 +83,20 @@ final class Promise
     /**
      * Resolves the promise.
      *
-     * @return TReturn
+     * @param  bool  $await  Whether to await the result of the promise.
+     * @return ($await is true ? TReturn : null)
      */
-    public function resolve(): mixed
+    public function resolve(bool $await = true): mixed
     {
         $this->defer();
 
         assert($this->future instanceof Future);
 
-        return $this->future->await();
+        if ($await === true) {
+            return $this->future->await();
+        }
+
+        return null;
     }
 
     /**
