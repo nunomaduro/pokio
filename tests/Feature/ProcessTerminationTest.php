@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-test('fork: die inside async closure terminates subprocess, not parent', function () {
+test('fork: die inside async closure terminates subprocess, not parent', function (): void {
     ensureForkEnvironment();
 
-    $promise = async(function () {
+    $promise = async(function (): void {
         exit('Goodbye!');
     });
 
@@ -13,10 +13,10 @@ test('fork: die inside async closure terminates subprocess, not parent', functio
     expect($result)->toBeNull();
 });
 
-test('fork: exit inside async closure terminates subprocess, not parent', function () {
+test('fork: exit inside async closure terminates subprocess, not parent', function (): void {
     ensureForkEnvironment();
 
-    $promise = async(function () {
+    $promise = async(function (): void {
         exit(42);
     });
 
@@ -24,7 +24,7 @@ test('fork: exit inside async closure terminates subprocess, not parent', functi
     expect($result)->toBeNull();
 });
 
-test('fork: async process gets killed, does not affect parent', function () {
+test('fork: async process gets killed, does not affect parent', function (): void {
     ensureForkEnvironment();
 
     $promise = async(function () {
