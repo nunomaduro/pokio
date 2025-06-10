@@ -97,7 +97,7 @@ test('async with a finally callback', function (): void {
 test('finally is called after exception', function (): void {
     $path = tempnam(sys_get_temp_dir(), 'pokio_');
 
-    $promise = async(function () {
+    $promise = async(function (): void {
         throw new RuntimeException('Exception 1');
     })->finally(function () use (&$path): void {
         file_put_contents($path, 'called');
@@ -175,12 +175,12 @@ test('promises are always waited for', function (): void {
         file_put_contents($path, 'b called by finally.', FILE_APPEND);
     });
 
-    async(function () use (&$path) {
+    async(function () use (&$path): void {
         async(fn () => file_put_contents($path, 'c called by callback, ', FILE_APPEND));
-    })->then(function () use (&$path) {
+    })->then(function () use (&$path): void {
         // append to the file
         async(fn () => file_put_contents($path, 'c called by then, ', FILE_APPEND));
-    })->finally(function () use (&$path) {
+    })->finally(function () use (&$path): void {
         // append to the file
         async(fn () => file_put_contents($path, 'c called by finally.', FILE_APPEND));
     });

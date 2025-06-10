@@ -49,13 +49,13 @@ final class Kernel
     /**
      * Specifies that pokio should use the fork as the async runtime.
      */
-    public function useFork(): void
+    public function useFork(?int $maxProcesses = null): void
     {
         if (Environment::supportsFork() === false) {
             throw new LogicException('Fork is not supported on this environment.');
         }
 
-        $this->asyncRuntime = new ForkRuntime(Environment::maxProcesses());
+        $this->asyncRuntime = new ForkRuntime($maxProcesses ?? Environment::maxProcesses());
     }
 
     /**

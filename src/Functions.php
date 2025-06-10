@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Pokio\Kernel;
+use Pokio\Channel\Channel;
 use Pokio\Pokio;
 use Pokio\Promise;
 
@@ -55,5 +55,15 @@ if (! function_exists('pokio')) {
     function pokio(): Pokio
     {
         return new Pokio;
+    }
+}
+
+if (! function_exists('chan')) {
+    /**
+     * Returns a Channel instance.
+     */
+    function chan(): Channel
+    {
+        return new Channel();
     }
 }

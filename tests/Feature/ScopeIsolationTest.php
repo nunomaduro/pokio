@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-test('sync: global variables do leak into closure scope', function () {
+test('sync: global variables do leak into closure scope', function (): void {
     ensureSyncEnvironment();
 
     global $leakyGlobal;
@@ -12,7 +12,7 @@ test('sync: global variables do leak into closure scope', function () {
     expect(await($promise))->toBeTrue();
 });
 
-test('sync: closure variables using `use` do leak outside', function () {
+test('sync: closure variables using `use` do leak outside', function (): void {
     ensureSyncEnvironment();
 
     $value = 'normal';
@@ -25,7 +25,7 @@ test('sync: closure variables using `use` do leak outside', function () {
         ->and($value)->toBe('secret');
 });
 
-test('sync: constants are available inside closures', function () {
+test('sync: constants are available inside closures', function (): void {
     ensureSyncEnvironment();
 
     define('SYNC_SCOPE_TEST_CONST', 'yes');
@@ -34,7 +34,7 @@ test('sync: constants are available inside closures', function () {
     expect($result)->toBe('yes');
 });
 
-test('sync: external variables are visible without `use`', function () {
+test('sync: external variables are visible without `use`', function (): void {
     ensureSyncEnvironment();
 
     $secret = 'nope';
@@ -60,7 +60,7 @@ test('sync: callback does not persist GLOBALS in sync env', function (): void {
         ->and($GLOBALS['test'])->toBe(2);
 });
 
-test('fork: global variables do leak into closure scope', function () {
+test('fork: global variables do leak into closure scope', function (): void {
     ensureForkEnvironment();
 
     global $leakyGlobal;
@@ -70,7 +70,7 @@ test('fork: global variables do leak into closure scope', function () {
     expect(await($promise))->toBeTrue();
 });
 
-test('fork: closure variables using `use` do not leak outside', function () {
+test('fork: closure variables using `use` do not leak outside', function (): void {
     ensureForkEnvironment();
 
     $value = 'normal';
@@ -84,7 +84,7 @@ test('fork: closure variables using `use` do not leak outside', function () {
         ->and($value)->toBe('normal');
 });
 
-test('fork: constants are available inside closures', function () {
+test('fork: constants are available inside closures', function (): void {
     ensureForkEnvironment();
 
     define('FORK_SCOPE_TEST_CONST', 'yes');
@@ -93,7 +93,7 @@ test('fork: constants are available inside closures', function () {
     expect($result)->toBe('yes');
 });
 
-test('fork: external variables are visible without `use`', function () {
+test('fork: external variables are visible without `use`', function (): void {
     ensureForkEnvironment();
 
     $secret = 'nope';

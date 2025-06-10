@@ -98,7 +98,7 @@ final class ForkRuntime implements Runtime
 
         /** @var Future<TResult> $future */
         // @phpstan-ignore-next-line
-        $future = new ForkFuture($pid, $ipc, function (int $pid) {
+        $future = new ForkFuture($pid, $ipc, function (int $pid): void {
             unset(self::$processes[$pid]);
         });
 
