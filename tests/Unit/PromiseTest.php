@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Pokio\Promise;
 
 test('no catch for correct throwable type throws exception', function (): void {
-    expect(function () {
+    expect(function (): void {
         $promise = (new Promise(function (): void {
             throw new RuntimeException('Uncaught exception');
         }))->catch(function (InvalidArgumentException $th): bool {
@@ -18,7 +18,7 @@ test('no catch for correct throwable type throws exception', function (): void {
 })->with('runtimes');
 
 test('Promise rethrows exception when catch block types do not match the thrown exception', function (): void {
-    expect(function () {
+    expect(function (): void {
         $promise = (new Promise(function (): void {
             throw new RuntimeException('Uncaught exception');
         }))->catch(function (InvalidArgumentException|LogicException $th): bool {
