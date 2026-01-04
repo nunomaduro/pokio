@@ -19,7 +19,9 @@
             "mem",
             "unwaited",
             "unschedule",
-            "unschedules"
+            "unschedules",
+            "defering",
+            "unserializes"
         ],
         "paths": []
     }

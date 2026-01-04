@@ -18,7 +18,6 @@
         "pestphp/pest": "^4.0.0",
         "pestphp/pest-plugin-type-coverage": "^4.0.0",
         "phpstan/phpstan": "^2.1.22",
-        "rector/rector": "^2.1.4",
         "symfony/var-dumper": "^7.3.2"
     },
     "conflict": {
@@ -37,6 +36,11 @@
             "Tests\\": "tests/"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
@@ -48,7 +52,6 @@
     },
     "scripts": {
         "lint": [
-            "rector",
             "pint"
         ],
         "test:type-coverage": "pest --type-coverage --min=100",
