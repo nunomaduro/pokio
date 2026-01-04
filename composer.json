@@ -13,12 +13,12 @@
         "php": "^8.3.0"
     },
     "require-dev": {
-        "laravel/pint": "^1.24.0",
+        "laravel/pint": "^1.26.0",
         "peckphp/peck": "^0.1.3",
-        "pestphp/pest": "^4.0.0",
-        "pestphp/pest-plugin-type-coverage": "^4.0.0",
-        "phpstan/phpstan": "^2.1.22",
-        "symfony/var-dumper": "^7.3.2"
+        "pestphp/pest": "^4.3.0",
+        "pestphp/pest-plugin-type-coverage": "^4.0.3",
+        "phpstan/phpstan": "^2.1.33",
+        "symfony/var-dumper": "^7.4.3"
     },
     "conflict": {
         "symplify/easy-parallel": "<11.2.2"
