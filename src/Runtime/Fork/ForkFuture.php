@@ -7,7 +7,6 @@ namespace Pokio\Runtime\Fork;
 use Closure;
 use Pokio\Contracts\Future;
 use Pokio\Exceptions\FutureAlreadyAwaited;
-use RuntimeException;
 
 /**
  * Represents the result of a forked process.
@@ -20,18 +19,6 @@ use RuntimeException;
  */
 final class ForkFuture implements Future
 {
-    /**
-     * The result of the forked process, if any.
-     *
-     * @var TResult|null
-     */
-    private mixed $result = null;
-
-    /**
-     * Indicates whether the result has been resolved.
-     */
-    private bool $resolved = false;
-
     /**
      * Whether the result has been awaited.
      */
@@ -69,9 +56,10 @@ final class ForkFuture implements Future
 
         $this->onWait->__invoke($this->pid);
 
-        $this->resolved = true;
+        /** @var TResult $result */
+        $result = unserialize($this->memory->pop());
 
-        return $this->result = $this->unserializeResult($this->memory->pop());
+        return $result;
     }
 
     /**
@@ -80,23 +68,5 @@ final class ForkFuture implements Future
     public function awaited(): bool
     {
         return $this->awaited;
-    }
-
-    /**
-     * Safely unserializes a value from the forked process.
-     *
-     * @return TResult
-     *
-     * @throws RuntimeException
-     */
-    private function unserializeResult(string $data): mixed
-    {
-        $result = @unserialize($data);
-
-        if ($result === false && $data !== 'b:0;') {
-            throw new RuntimeException('Failed to unserialize fork result.');
-        }
-
-        return $result;
     }
 }
