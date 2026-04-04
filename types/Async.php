@@ -24,6 +24,7 @@ assertType('string', await($promise));
 $promise = async(fn () => throw new Exception())
     ->catch(fn (Throwable $th) => 1);
 
+// @phpstan-ignore-next-line
 assertType('int', await($promise));
 
 $promise = async(fn () => throw new Exception())

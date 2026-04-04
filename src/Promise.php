@@ -112,7 +112,6 @@ final class Promise
             $result = $callback();
 
             if ($result instanceof Promise) {
-                // @phpstan-ignore-next-line
                 return $result->then($then);
             }
 
