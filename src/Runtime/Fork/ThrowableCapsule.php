@@ -62,15 +62,12 @@ final class ThrowableCapsule
             $reflection = new ReflectionClass($throwable);
 
             $fileProp = $reflection->getProperty('message');
-            $fileProp->setAccessible(true);
             $fileProp->setValue($throwable, $data['message']);
 
             $fileProp = $reflection->getProperty('file');
-            $fileProp->setAccessible(true);
             $fileProp->setValue($throwable, $data['file']);
 
             $lineProp = $reflection->getProperty('line');
-            $lineProp->setAccessible(true);
             $lineProp->setValue($throwable, $data['line']);
             // @codeCoverageIgnoreStart
         } catch (ReflectionException) {

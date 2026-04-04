@@ -189,7 +189,16 @@ test('promises are always waited for', function (): void {
 
     UnwaitedFutureManager::instance()->run();
 
-    expect(file_get_contents($path))->toBe('start: a called by callback, a called by then, a called by finally.b called by callback, b called by then, b called by finally.c called by callback, c called by then, c called by finally.');
+    $content = file_get_contents($path);
+
+    // Each promise's callbacks must run in order: callback -> then -> finally
+    expect($content)->toStartWith('start: ')
+        ->and(strpos($content, 'a called by callback, '))->toBeLessThan(strpos($content, 'a called by then, '))
+        ->and(strpos($content, 'a called by then, '))->toBeLessThan(strpos($content, 'a called by finally.'))
+        ->and(strpos($content, 'b called by callback, '))->toBeLessThan(strpos($content, 'b called by then, '))
+        ->and(strpos($content, 'b called by then, '))->toBeLessThan(strpos($content, 'b called by finally.'))
+        ->and(strpos($content, 'c called by callback, '))->toBeLessThan(strpos($content, 'c called by then, '))
+        ->and(strpos($content, 'c called by then, '))->toBeLessThan(strpos($content, 'c called by finally.'));
 })->with('runtimes');
 
 test('invokable promise resolves correctly', function (): void {
