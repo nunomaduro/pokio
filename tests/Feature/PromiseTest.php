@@ -193,12 +193,12 @@ test('promises are always waited for', function (): void {
 
     // Each promise's callbacks must run in order: callback -> then -> finally
     expect($content)->toStartWith('start: ')
-        ->and(strpos($content, 'a called by callback, '))->toBeLessThan(strpos($content, 'a called by then, '))
-        ->and(strpos($content, 'a called by then, '))->toBeLessThan(strpos($content, 'a called by finally.'))
-        ->and(strpos($content, 'b called by callback, '))->toBeLessThan(strpos($content, 'b called by then, '))
-        ->and(strpos($content, 'b called by then, '))->toBeLessThan(strpos($content, 'b called by finally.'))
-        ->and(strpos($content, 'c called by callback, '))->toBeLessThan(strpos($content, 'c called by then, '))
-        ->and(strpos($content, 'c called by then, '))->toBeLessThan(strpos($content, 'c called by finally.'));
+        ->and(mb_strpos($content, 'a called by callback, '))->toBeLessThan(mb_strpos($content, 'a called by then, '))
+        ->and(mb_strpos($content, 'a called by then, '))->toBeLessThan(mb_strpos($content, 'a called by finally.'))
+        ->and(mb_strpos($content, 'b called by callback, '))->toBeLessThan(mb_strpos($content, 'b called by then, '))
+        ->and(mb_strpos($content, 'b called by then, '))->toBeLessThan(mb_strpos($content, 'b called by finally.'))
+        ->and(mb_strpos($content, 'c called by callback, '))->toBeLessThan(mb_strpos($content, 'c called by then, '))
+        ->and(mb_strpos($content, 'c called by then, '))->toBeLessThan(mb_strpos($content, 'c called by finally.'));
 })->with('runtimes');
 
 test('invokable promise resolves correctly', function (): void {
