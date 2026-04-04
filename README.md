@@ -4,7 +4,7 @@
     </a>
 </p>
 
-> **Caution**: This package is a **work in progress** and it manipulates process lifecycles using low-level and potentially unsafe techniques such as FFI for inter-process communication, and preserving state across process spawns. It is intended strictly for internal use (e.g., performance optimizations in Pest). **Don't use this in production or use at your own risk**—no guarantees are provided.
+> **Caution**: This package manipulates process lifecycles using low-level and potentially unsafe techniques such as FFI for inter-process communication, and preserving state across process spawns. It is intended strictly for internal use (e.g., performance optimizations in Pest). **Don't use this in production or use at your own risk**—no guarantees are provided.
 
 <a href="https://nunomaduro.com/">
   <picture>
@@ -57,7 +57,7 @@ However, unlike other libraries, if **PCNTL** or **FFI** are not available, Poki
 ⚡️ Get started by requiring the package using [Composer](https://getcomposer.org):
 
 ```bash
-composer require nunomaduro/pokio:^0.1
+composer require nunomaduro/pokio
 ```
 
 ## Usage
