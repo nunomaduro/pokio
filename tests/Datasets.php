@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use Pokio\Environment;
+
 dataset('runtimes', [
     'sync' => fn () => pokio()->useSync(),
     'fork' => function (): void {
-        if (! extension_loaded('pcntl') || ! extension_loaded('posix')) {
-            $this->markTestSkipped('The pcntl and posix extensions are required to use the fork runtime.');
+        if (! Environment::supportsFork()) {
+            $this->markTestSkipped('Fork is not supported in this environment.');
         }
 
         pokio()->useFork();

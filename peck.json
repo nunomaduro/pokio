@@ -21,7 +21,11 @@
             "unschedule",
             "unschedules",
             "defering",
-            "unserializes"
+            "unserializes",
+            "xdebug",
+            "xdebug's",
+            "ini",
+            "yml"
         ],
         "paths": []
     }
