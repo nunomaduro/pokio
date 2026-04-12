@@ -15,12 +15,12 @@ pest()->beforeEach(function (): void {
 if (! function_exists('ensureForkEnvironment')) {
     /**
      * Ensures the current environment is set to fork.
-     * Skips the test if the pcntl and posix extensions are not loaded.
+     * Skips the test if the environment does not support forking.
      */
     function ensureForkEnvironment(): void
     {
-        if (! extension_loaded('pcntl') || ! extension_loaded('posix')) {
-            test()->markTestSkipped('The pcntl and posix extensions are required to use the fork runtime.');
+        if (! Environment::supportsFork()) {
+            test()->markTestSkipped('Fork is not supported in this environment.');
         }
 
         pokio()->useFork();

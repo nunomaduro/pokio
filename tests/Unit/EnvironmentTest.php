@@ -39,3 +39,36 @@ test('environment get total memory for unsupported os', function (): void {
     expect(fn () => $reflectionMethod->invokeArgs(null, ['UnsupportedOS']))
         ->toThrow(RuntimeException::class, 'Unsupported OS: UnsupportedOS');
 });
+
+test('hasXdebugDebugMode returns true when xdebug debug mode is enabled', function (): void {
+    $reflection = new ReflectionClass(Environment::class);
+    $method = $reflection->getMethod('hasXdebugDebugMode');
+
+    $result = $method->invoke(null);
+
+    $mode = getenv('XDEBUG_MODE');
+
+    if ($mode === false) {
+        $mode = (string) ini_get('xdebug.mode');
+    }
+
+    $expectedActive = str_contains($mode, 'debug');
+
+    expect($result)->toBe($expectedActive);
+})->skip(fn () => ! extension_loaded('xdebug'), 'Xdebug must be loaded');
+
+test('supportsFork returns false when xdebug debug mode is enabled', function (): void {
+    expect(Environment::supportsFork())->toBeFalse();
+})->skip(function (): bool {
+    if (! extension_loaded('xdebug')) {
+        return true;
+    }
+
+    $mode = getenv('XDEBUG_MODE');
+
+    if ($mode === false) {
+        $mode = (string) ini_get('xdebug.mode');
+    }
+
+    return ! str_contains($mode, 'debug');
+});

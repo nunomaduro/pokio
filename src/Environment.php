@@ -53,9 +53,39 @@ final class Environment
      */
     public static function supportsFork(): bool
     {
+        if (self::hasXdebugDebugMode()) {
+            return false;
+        }
+
         return extension_loaded('pcntl')
             && extension_loaded('posix')
             && class_exists('FFI');
+    }
+
+    /**
+     * Whether xdebug debug mode is enabled.
+     *
+     * Xdebug's debug mode maintains socket connections that are inherited
+     * by forked child processes, causing them to crash silently. Other
+     * modes (develop, trace, profile, coverage) do not establish external
+     * connections and are safe for forking.
+     *
+     * Checks the XDEBUG_MODE environment variable first, which takes
+     * precedence over the xdebug.mode INI setting.
+     */
+    private static function hasXdebugDebugMode(): bool
+    {
+        if (! extension_loaded('xdebug')) {
+            return false;
+        }
+
+        $mode = getenv('XDEBUG_MODE');
+
+        if ($mode === false) {
+            $mode = (string) ini_get('xdebug.mode');
+        }
+
+        return str_contains($mode, 'debug');
     }
 
     /**
