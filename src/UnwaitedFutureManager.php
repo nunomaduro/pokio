@@ -19,7 +19,7 @@ final class UnwaitedFutureManager
     /**
      * Creates a new future manager instance.
      *
-     * @param  array<string, Future<mixed>>  $queue
+     * @param  array<int, Future<mixed>>  $queue
      */
     private function __construct(
         private array $queue,
@@ -60,9 +60,9 @@ final class UnwaitedFutureManager
      */
     public function schedule(Future $future): void
     {
-        $hash = spl_object_hash($future);
+        $id = spl_object_id($future);
 
-        $this->queue[$hash] = $future;
+        $this->queue[$id] = $future;
     }
 
     /**
@@ -72,10 +72,10 @@ final class UnwaitedFutureManager
      */
     public function unschedule(Future $future): void
     {
-        $hash = spl_object_hash($future);
+        $id = spl_object_id($future);
 
-        if (isset($this->queue[$hash])) {
-            unset($this->queue[$hash]);
+        if (isset($this->queue[$id])) {
+            unset($this->queue[$id]);
         }
     }
 
